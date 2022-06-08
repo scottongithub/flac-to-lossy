@@ -6,7 +6,7 @@ Target codes supported: opus, ogg, and mp3
 
 Multiple threads/encoding sessions running at the same time is supported
 
-Encoding can be stopped (via ctrl-c) and restarted later, for larger sets. Unfinished files from the interrupted session(s) will be cleaned up and started again
+Encoding can be stopped (ctrl-c) and restarted later, for larger sets. Unfinished files from the interrupted session(s) will be cleaned up and started again
 
 
 ## How it works
@@ -28,9 +28,9 @@ Encoding can be stopped (via ctrl-c) and restarted later, for larger sets. Unfin
 # Usage
 * `git clone https://github.com/scottongithub/flac-to-lossy.git`
 * `pip install tinytag`
-* all configuration is at top of `flac-to-lossy.py` in/out/recycle_bin directories, codec parameters etc.
+* all configuration is at top of `flac-to-lossy.py` - in/out/recycle_bin directories, codec parameters etc.
 * initialize new repository and database: `python3 flac-to-lossy.py --init`
-* start encoding: `python3 flac-to-lossy.py --encode`. Multiple terminal sessions are supported - it should distribute evenly among processors.
+* start encoding: `python3 flac-to-lossy.py --encode`. Multiple terminal sessions are supported - it should distribute evenly among processors
 * you can interrupt encoding at any time with ctrl-c
 * pick encoding back up with `python3 flac-to-lossy.py --encode` - it will remove unfinished files from last session and restart them
-* for larger sets you can leave the stats (time reamining, etc.) showing as `watch flac-to-lossy.py --stats`
+* for larger sets you can leave the stats (time remaining, etc.) showing as `watch flac-to-lossy.py --stats`
