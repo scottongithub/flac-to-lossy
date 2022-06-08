@@ -43,10 +43,10 @@ def f2l_encode( in_dir, out_dir, recycle_bin, db_path, error_log, flac_strings_t
             track = tag.track
             disc = tag.disc
             dest_dir = out_dir + dir_suffix_lossy
-            title_sanitized = ""
-            for character in title:
-                if character.isalnum() or character in [" ", "-", "+", "&", "(", ")", "[", "]", "'"]:
-                    title_sanitized += character
+            # title_sanitized = ""
+            # for character in title:
+            #     if character.isalnum() or character in [" ", "-", "+", "&", "(", ")", "[", "]", "'"]:
+            #         title_sanitized += character
             # outfile = dest_dir + "/" + track + " - " + title_sanitized + "." + target_codec
             outfile = dest_dir + "/" + filename_base + "." + target_codec
             shutil.move(outfile, recycle_bin)
