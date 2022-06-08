@@ -1,6 +1,6 @@
 # Overview
 ## Purpose
-Takes a repository containing flac-encoded files in it and outputs a new repository replacing all flac files with their lossy versions. All other folders/files (e.g. album art) copied over and preserved
+Takes a repository containing flac-encoded files and outputs a new repository replacing all flac files with their lossy versions. All other folders/files (e.g. album art) copied over and preserved
 
 Target codes supported: opus, ogg, and mp3
 
