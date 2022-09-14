@@ -5,7 +5,7 @@ from f2l_encode import f2l_encode
 
 in_dir = "path/to/source_dir/" # need trailing slashes here
 out_dir = "path/to/dest_dir/" # need trailing slashes here
-recycle_bin = "path/to/temp_folder/" # uniished tracks from interrupted sessions get moved here (rather than deleted)
+recycle_bin = "path/to/temp_folder/" # unfinished tracks from interrupted sessions get moved here (rather than deleted)
 db_path = out_dir + "flac_to_lossy.db"
 error_log = out_dir + "flac_to_lossy_errors.log"
 target_codec = "opus" # mp3, opus, or ogg
