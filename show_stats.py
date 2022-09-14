@@ -4,6 +4,11 @@ def show_stats(db_path):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
 
+    query = 'SELECT integer_0 FROM misc WHERE id = "session_row_count"'
+    session_row_count_query = c.execute(query)
+    rows = session_row_count_query.fetchall()
+    session_row_count = int(rows[0][0])
+
     query = 'SELECT duration_s FROM tracks'
     total_dur = c.execute(query)
     track_count = 0
@@ -19,10 +24,14 @@ def show_stats(db_path):
         finished_duration_s += int(dur[0])
 
 
-    query = 'SELECT duration_s, locktime_s, donetime_s from tracks WHERE finished = 1 and donetime_s IS NOT NULL ORDER BY id DESC LIMIT 50'
-    rows = c.execute(query)
+    query = 'SELECT duration_s, locktime_s, donetime_s from tracks WHERE finished = 1 and donetime_s IS NOT NULL ORDER BY id DESC LIMIT ?'
+    if session_row_count < 50:
+        row_limit = session_row_count
+    else:
+        row_limit = 50
+    rows = c.execute(query, (row_limit,))
     rows = rows.fetchall()
-    if len(rows) > 20: # don't show time left until there's enough data
+    if len(rows) > 20: # don't calculate time left until there's enough data
         sample_duration_s = 0
         locktime_min = 9999999999
         donetime_max = 0
@@ -45,13 +54,12 @@ def show_stats(db_path):
     print("total tracks:                " + str(track_count))
     print("track duration in hours:     " + str(total_duration_h))
     print("track duration in days:      " + str(round(total_duration_d, 1)))
-    print("percent encoded (by time):   " + str(finished_percent))
-    if 'real_time_left_s' in locals():
+    print("track time encoded so far:  " + "%" + "{:02d}".format(finished_percent))
+    if session_row_count > 20:
         print("real time left (s):          " + str(round(real_time_left_s)))
         print("real time left (m):          " + str(round(real_time_left_s / 60)))
         print("real time left (h):          " + str(round(real_time_left_s / 3600, 1)))
         print("rate over past " + str(len(rows)) + " tracks:    " + str(round(1 / current_rate)) + "x")
-        # print("encoded time left (s):       " + str(total_duration_s - finished_duration_s))
     print()
 
     if conn:

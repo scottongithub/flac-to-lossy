@@ -14,6 +14,10 @@ def f2l_init( in_dir, out_dir, db_path, error_log, flac_strings_to_replace, flac
             title TEXT, track_num TEXT, duration_s TEXT, bitrate TEXT, dir_suffix TEXT, filename TEXT, \
             locked INTEGER DEFAULT 0, locktime_s INTEGER, donetime_s INTEGER, finished INTEGER DEFAULT 0)'
     c.execute(query)
+    query = 'CREATE TABLE IF NOT EXISTS misc(id TEXT PRIMARY KEY, integer_0 INTEGER)'
+    c.execute(query)
+    query = 'INSERT OR IGNORE INTO misc(id, integer_0) VALUES (?,?);'
+    c.execute(query, ("session_row_count", 0,))
     conn.commit()
 
     # set up destination directory structure and copy non-flac files over

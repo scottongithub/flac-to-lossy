@@ -9,13 +9,13 @@ recycle_bin = "path/to/temp_folder/" # unfinished tracks from interrupted sessio
 db_path = out_dir + "flac_to_lossy.db"
 error_log = out_dir + "flac_to_lossy_errors.log"
 target_codec = "opus" # mp3, opus, or ogg
-encoder_audio_quality = "7" # For ogg, higher is better. For mp3, lower is better. Does not apply to opus
 opus_bitrate = "192K" # e.g. "224K"
+encoder_audio_quality = "7" # 0-9; For ogg, higher is better. For mp3, lower is better. Does not apply to opus
 # locktime_threshhold (in seconds) is how to distinguish if a locked track is part of the
 # current run (and must be kept) or a past, likely interrupted, run, and must be removed.
 # it should be a value that you don't expect any track's encoding time to exceed
-# probably no need to change it (from default 30) but here it is
-locktime_threshhold_s = 30
+# probably no need to change it from default but here it is
+locktime_threshhold_s = 60
 # strings from the filepath (that indicate FLAC files) which will be replaced by flac_str_replacement
 flac_strings_to_replace = ["24-192 HD FLAC", "24-176 HD FLAC", "24-192 Vinyl FLAC", "24-96 HD FLAC", "FLAC16", "16.44 FLAC", "Flac Lossless", "24Bit FLAC", "FLAC24-96", "FLAC-WEB 24-192", "16-44", "FLAC", "Flac", "flac"]
 
