@@ -1,36 +1,35 @@
 # Overview
-## Purpose
-Takes a repository containing flac-encoded files and outputs a new repository replacing all flac files with their lossy versions. All other folders/files (e.g. album art) copied over and preserved
+## What it does
+Takes a directory containing flac-encoded files and outputs a new directory replacing all flac files with their lossy versions. All other folders/files (e.g. album art) copied over and preserved
 
 Target codes supported: opus, ogg, and mp3
 
-Multiple threads/encoding sessions running at the same time is supported
+Uses multiple processes by default, configurable at the top of flac-to-lossy.py  
 
 Encoding can be stopped (ctrl-c) and restarted later, for larger sets. Unfinished files from the interrupted session(s) will be cleaned up and started again
 
 
-## How it works
+## How it does it
 ### Initialize
-* creates a sqlite3 database of all files to be encoded, so state can be tracked during and in-between encode sessions
+* creates a sqlite3 database of all files to be encoded, so state can be tracked during and between encode sessions
 * creates a new directory structure, based on the old, that:
-  + replaces flac-ey (e.g. "24-192 HD FLAC") strings in directory names with "OPUS-224K" (or whatever the encode setting is)
+  + replaces flac-ey (e.g. "24-192 HD FLAC") strings in directory names with their lossy equivalents (e.g. "OPUS-224K")
   + copies over all non-flac files (e.g. artwork) to their associated new directory, maintaining structure
 
 ### Encode
-* removes any incomplete files left over from last (interrupted) encode session. Locktimes are used to distinguish between locked tracks that are running in the current run (and must be kept) or a past, likely interrupted, run (and must be removed)
-* encodes with `ffmpeg` and places the new file into the new repository
+* removes any incomplete files left over from last (interrupted) encode session. `session_id`, based on timestamp, is used to determine if locked tracks are part of a past, interrupted run.
+* encodes (remaining pending) files with `ffmpeg` into the destination directory
 
 # Prerequisites
-- ffmpeg - 4.2.4 has been tested
+- ffmpeg - 4.2.4 through 4.2.7 have been tested
 - Python package `tinytag` is needed - 1.6 through 1.81 have been tested
 - Runs on Linux
 
 # Usage
-* `git clone https://github.com/scottongithub/flac-to-lossy.git`
 * `pip install tinytag`
-* all configuration is at top of `flac-to-lossy.py` - in/out/recycle_bin directories, codec parameters etc.
+* `git clone https://github.com/scottongithub/flac-to-lossy.git`
+* all configuration is at top of `flac-to-lossy.py` - in/out/recycle_bin directories, codec parameters, multiprocessing, etc.
 * initialize new repository and database: `python3 flac-to-lossy.py --init`
-* start encoding: `python3 flac-to-lossy.py --encode`. Multiple terminal sessions are supported - it should distribute evenly among processors
+* start encoding: `python3 flac-to-lossy.py --encode`. Progress will be shown as it runs
 * you can interrupt encoding at any time with ctrl-c
 * pick encoding back up with `python3 flac-to-lossy.py --encode` - it will remove unfinished files from last session and restart them
-* for larger sets you can leave the stats (time remaining, etc.) showing as `watch flac-to-lossy.py --stats`

@@ -25,17 +25,19 @@ def show_stats(db_path):
 
 
     query = 'SELECT duration_s, locktime_s, donetime_s from tracks WHERE finished = 1 and donetime_s IS NOT NULL ORDER BY id DESC LIMIT ?'
-    if session_row_count < 50:
+    if session_row_count == 0:
         row_limit = session_row_count
+    elif session_row_count < 50:
+        row_limit = session_row_count - 1
     else:
         row_limit = 50
-    rows = c.execute(query, (row_limit,))
-    rows = rows.fetchall()
-    if len(rows) > 20: # don't calculate time left until there's enough data
+    session_rows = c.execute(query, (row_limit,))
+    session_rows = session_rows.fetchall()
+    if len(session_rows) > 20: # don't calculate time left until there's enough data
         sample_duration_s = 0
         locktime_min = 9999999999
         donetime_max = 0
-        for row in rows:
+        for row in session_rows:
             sample_duration_s = sample_duration_s + int(row[0])
             if row[1] < locktime_min:
                 locktime_min = row[1]
@@ -55,11 +57,15 @@ def show_stats(db_path):
     print("track duration in hours:     " + str(total_duration_h))
     print("track duration in days:      " + str(round(total_duration_d, 1)))
     print("track time encoded so far:  " + "%" + "{:02d}".format(finished_percent))
-    if session_row_count > 20:
+    print("tracks done this session:    " + str(session_row_count))
+    if len(session_rows) < 21:
+        print("\n*** more stats when session tracks > 20 ***")
+    else:
+        print("")
         print("real time left (s):          " + str(round(real_time_left_s)))
         print("real time left (m):          " + str(round(real_time_left_s / 60)))
         print("real time left (h):          " + str(round(real_time_left_s / 3600, 1)))
-        print("rate over past " + str(len(rows)) + " tracks:    " + str(round(1 / current_rate)) + "x")
+        print("rate over past " + str(len(session_rows)) + " tracks:    " + str(round(1 / current_rate)) + "x")
     print()
 
     if conn:

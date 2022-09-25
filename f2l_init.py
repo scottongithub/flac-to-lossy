@@ -12,12 +12,14 @@ def f2l_init( in_dir, out_dir, db_path, error_log, flac_strings_to_replace, flac
     c = conn.cursor()
     query = 'CREATE TABLE IF NOT EXISTS tracks(id INTEGER PRIMARY KEY AUTOINCREMENT, artist TEXT, album TEXT,  \
             title TEXT, track_num TEXT, duration_s TEXT, bitrate TEXT, dir_suffix TEXT, filename TEXT, \
-            locked INTEGER DEFAULT 0, locktime_s INTEGER, donetime_s INTEGER, finished INTEGER DEFAULT 0)'
+            locked INTEGER DEFAULT 0, locktime_s INTEGER, donetime_s INTEGER, finished INTEGER DEFAULT 0, session_id INTEGER)'
     c.execute(query)
     query = 'CREATE TABLE IF NOT EXISTS misc(id TEXT PRIMARY KEY, integer_0 INTEGER)'
     c.execute(query)
     query = 'INSERT OR IGNORE INTO misc(id, integer_0) VALUES (?,?);'
     c.execute(query, ("session_row_count", 0,))
+    query = 'INSERT OR IGNORE INTO misc(id, integer_0) VALUES (?,?);'
+    c.execute(query, ("all_done", 0,))
     conn.commit()
 
     # set up destination directory structure and copy non-flac files over
@@ -33,7 +35,7 @@ def f2l_init( in_dir, out_dir, db_path, error_log, flac_strings_to_replace, flac
                 print("copying: " + dest_dir + "/" + filename)
                 shutil.copy2(root + "/" + filename, dest_dir + "/" + filename)
 
-    # populate database
+    # populate database; each row is a track
     _artist = None
     for (root,dirs,files) in os.walk(in_dir, topdown=True):
         for filename in files:
