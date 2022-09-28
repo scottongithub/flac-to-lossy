@@ -30,6 +30,11 @@ Encoding can be stopped (ctrl-c) and restarted later, for larger sets. Unfinishe
 * `git clone https://github.com/scottongithub/flac-to-lossy.git`
 * all configuration is at top of `flac-to-lossy.py` - in/out/recycle_bin directories, codec parameters, multiprocessing, etc.
 * initialize new repository and database: `python3 flac-to-lossy.py --init`
-* start encoding: `python3 flac-to-lossy.py --encode`. Progress will be shown as it runs
+* start encoding: `python3 flac-to-lossy.py --encode`. Progress will be shown as it runs:
+
+<p align="left">
+<img src="https://user-images.githubusercontent.com/21364725/192796755-f91bc0a4-951e-400c-8d0c-33945d30e5df.png" width="250" />
+</p>
+
 * you can interrupt encoding at any time with ctrl-c
 * pick encoding back up with `python3 flac-to-lossy.py --encode` - it will remove unfinished files from last session and restart them

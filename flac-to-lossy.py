@@ -5,9 +5,9 @@ from show_stats import show_stats
 from f2l_init import f2l_init
 from f2l_encode import f2l_encode, f2l_cleanup
 
-in_dir = "/path/to/source/" # needs trailing slash
-out_dir = "/path/to/dest/" # needs trailing slash
-recycle_bin = "/path/to/temp/" # needs trailing slash; unfinished tracks from interrupted sessions get moved here (rather than deleted)
+in_dir = "/path/to/source_dir/" # needs trailing slash
+out_dir = "/path/to/dest_dir/" # needs trailing slash
+recycle_bin = "/path/to/temp_dir/" # unfinished tracks from interrupted sessions get moved here (rather than deleted); needs trailing slash
 db_path = out_dir + "flac_to_lossy.db"
 error_log = out_dir + "flac_to_lossy_errors.log"
 target_codec = "opus" # mp3, opus, or ogg
